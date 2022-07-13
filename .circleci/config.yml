@@ -223,11 +223,7 @@ jobs:
       # attach workspace
       - attach_workspace:
           at: ~/
-      - run:
-          name: Install tar gzip
-          command: |
-            apk add --update --no-cache tar gzip ansible
-            pip3 install awscli
+      
       - run:
           name: Install openssh
           command: |
