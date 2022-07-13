@@ -209,6 +209,43 @@ jobs:
       # Here's where you will add some code to rollback on failure
       - destroy-environment
 
+  configure-infrastructure:
+    docker:
+      # Docker image here that supports Ansible
+      - image: cimg/base:stable
+    steps:
+      # Checkout code from git
+      - checkout
+      - install_awscli
+      - install_ansible
+      # Add ssh keys with fingerprint
+      - add_ssh_keys:
+          fingerprints: ["24:6f:08:e5:90:5e:a9:ee:53:b3:a9:44:9a:8a:c0:cc"]
+      # attach workspace
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Install tar gzip
+          command: |
+            apk add --update --no-cache tar gzip ansible
+            pip install awscli
+      - run:
+          name: Install openssh
+          command: |
+            apk add --update openssh-server
+      - run:
+          name: View content of inventory.txt
+          command: cat .circleci/ansible/inventory.txt    
+      - run:
+          name: Configure server
+          command: |
+            # Your code here
+            cd .circleci/ansible
+            cat inventory.txt
+
+            ansible-playbook -i inventory.txt configure-server.yml
+      -destroy-environment
+
 workflows:
   default:
     jobs:
@@ -227,3 +264,5 @@ workflows:
           filters:
             branches:
               only: [main]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
