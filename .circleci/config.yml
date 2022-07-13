@@ -211,7 +211,7 @@ jobs:
   configure-infrastructure:
     docker:
       # Docker image here that supports Ansible
-      - image: cimg/base:stable
+      - image: python:3.7-alpine3.16
     steps:
       # Checkout code from git
       - checkout
@@ -223,7 +223,11 @@ jobs:
       # attach workspace
       - attach_workspace:
           at: ~/
-      
+      - run:
+          name: Install tar gzip
+          command: |
+            apk add --update --no-cache tar gzip ansible
+            pip install awscli
       - run:
           name: Install openssh
           command: |
