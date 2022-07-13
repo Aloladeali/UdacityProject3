@@ -171,15 +171,11 @@ jobs:
 
   deploy-infrastructure:
     docker:
-      - image: amazon/awscli
+      - image: cimg/base:stable
     steps:
       # Checkout code from git
       - checkout
       - install_awscli
-      - run:
-          name: Install tar and gzip
-          command: |
-            yum install -y tar gzip
       - run:
           name: Ensure frontend infrastructure exist
           command: |
@@ -215,7 +211,7 @@ jobs:
   configure-infrastructure:
     docker:
       # Docker image here that supports Ansible
-      - image: amazon/aws-cli
+      - image: cimg/base:stable
     steps:
       # Checkout code from git
       - checkout
@@ -228,9 +224,10 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
-          name: Install tar and gzip
+          name: Install tar gzip
           command: |
-            yum install -y tar gzip
+            apk add --update --no-cache tar gzip ansible
+            pip3 install awscli
       - run:
           name: Install openssh
           command: |
