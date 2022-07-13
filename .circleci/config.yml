@@ -177,6 +177,10 @@ jobs:
       - checkout
       - install_awscli
       - run:
+          name: Install tar and gzip
+          command: |
+            yum install -y tar gzip
+      - run:
           name: Ensure frontend infrastructure exist
           command: |
             aws cloudformation deploy \
@@ -224,10 +228,9 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
-          name: Install tar gzip
+          name: Install tar and gzip
           command: |
-            apk add --update --no-cache tar gzip ansible
-            pip install awscli
+            yum install -y tar gzip
       - run:
           name: Install openssh
           command: |
