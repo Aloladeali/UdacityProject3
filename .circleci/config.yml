@@ -4,33 +4,59 @@ commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
     parameters:
-      # Add parameter here   
+      Workflow_ID:
+        type: string
+        default: ${CIRCLE_WORKFLOW_ID:0:7}
     steps:
       - run:
           name: Destroy environments
           when: on_fail
           command: |
-            # Your code here
-            exit 1
+            # Empty frontend bucket
+            aws s3 rm s3://udapeople-<<parameters.Workflow_ID>> --recursive
 
+            # Delete frontend stack
+            aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.Workflow_ID >>
+
+            # Delete backend stack
+            aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.Workflow_ID >>
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
     parameters:
-      # Add parameter here     
+      # Add parameter here
+      workflow_ID:
+        type: string
+        default: ${CIRCLE_WORKFLOW_ID:0:7}    
     steps:
       - run:
           name: Revert migrations
           # Add when this will run
+          when: on_fail
           command: |
-            # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS = 1
-            if(( $SUCCESS==1 )); 
-            then
-            #  cd ~/project/backend
-            #  npm install
-            #  Add revert code here. You can find this in the Getting Started section.
-              exit 1
-            fi
+              cd ~/project/backend
+              npm install
+              npm run migrations:revert
+              
+  install_awscli:
+    description: Install AWS CLI v2
+    steps:
+      - run:
+          name: Install AWS CLI v2
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+
+  install_ansible:
+    description: Install Ansible
+    steps:
+      - run:
+          name: Install Ansible
+          command: |
+            sudo apt update
+            sudo apt install software-properties-common -y
+            sudo add-apt-repository --yes --update ppa:ansible/ansible
+            sudo apt intall ansible -y
             
 jobs:
   build-frontend:
@@ -44,7 +70,9 @@ jobs:
           name: Build front-end
           command: |
             # Your code here
-            exit 1
+            cd frontend
+            npm install
+            npm run build
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
@@ -59,8 +87,9 @@ jobs:
       - run:
           name: Back-end build
           command: |
-             # Your code here
-             exit 1
+             cd backend
+             npm install
+             npm run build
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
@@ -68,34 +97,78 @@ jobs:
   test-frontend:
     docker:
       # Docker image here
+      - image: circleci/node:13.8.0
     steps:
       # Checkout code from git
+      - checkout
       # Restore from cache
+      - restore_cache:
+          keys: [frontend-build]
       # Your job code here
+      - run:
+          name: Test front-end
+          command: |
+              cd frontend
+              npm install
+              npm run test
                 
   test-backend:
     docker:
       # Docker image here
+      - image: circleci/node:13.8.0
     steps:
       # Checkout code from git
+      - checkout
       # Restore from cache
+      - restore_cache:
+          keys: [backend-build]
       # Your job code here
+      - run:
+          name: Test back-end
+          command: |
+              cd frontend
+              npm install
+              npm run test
+
             
   scan-frontend:
     docker:
       # Docker image here
+      - image: circleci/node:13.8.0
     steps:
       # Checkout code from git
+      - checkout
       # Restore from cache
+      - restore_cache:
+          keys: [frontend-build]
       # Your job code here
+      - run:
+          name: Analyze front-end
+          command: |
+              cd frontend
+              npm install
+              npm audit fix --force --audit-level=critical
+              npm audit --audit-level=critical
 
   scan-backend:
     docker:
       # Docker image here
+      - image: circleci/node:13.8.0
     steps:
       # Checkout code from git
+      - checkout
       # Restore from cache
+      - restore_cache:
+          keys: [backend-build]
       # Your job code here
+      - run:
+          name: Analyze back-end
+          command: |
+              cd backend
+              npm install
+              npm audit fix --force --audit-level=critical
+              npm audit fix --force --audit-level=critical
+              npm audit --audit-level=critical
 
   deploy-infrastructure:
     docker:
