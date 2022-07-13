@@ -264,4 +264,4 @@ workflows:
             #branches:
               #only: [main]
       - configure-infrastructure:
-          requires: [deploy-infrastructure]
+          #requires: [deploy-infrastructure]
