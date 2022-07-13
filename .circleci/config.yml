@@ -54,9 +54,8 @@ commands:
           name: Install Ansible
           command: |
             sudo apt update
-            sudo apt install software-properties-common -y
-            sudo add-apt-repository --yes --update ppa:ansible/ansible
-            sudo apt intall ansible -y
+            sudo apt install -y python3 python3-pip
+            python3 -m pip install --user ansible
             
 jobs:
   build-frontend:
@@ -249,20 +248,20 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-frontend
-      - build-backend
-      - test-frontend:
-          requires: [build-frontend]
-      - test-backend:
-          requires: [build-backend]
-      - scan-backend:
-          requires: [build-backend]
-      - scan-frontend:
-          requires: [build-frontend]
-      - deploy-infrastructure:
-          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          filters:
-            branches:
-              only: [main]
+      #- build-frontend
+      #- build-backend
+      #- test-frontend:
+          #requires: [build-frontend]
+      #- test-backend:
+          #requires: [build-backend]
+      #- scan-backend:
+          #requires: [build-backend]
+      #- scan-frontend:
+          #requires: [build-frontend]
+      #- deploy-infrastructure:
+          #requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+          #filters:
+            #branches:
+              #only: [main]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
