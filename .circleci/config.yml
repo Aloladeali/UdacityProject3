@@ -285,7 +285,7 @@ jobs:
       - install_ansible
       - install-nodejs
       - restore_cache:
-         keys:[fronntend-build]
+         keys:[frontend-build]
       - run:
           name: Install dependencies
           command: |
@@ -328,7 +328,7 @@ jobs:
       - checkout
       - install_awscli
       - install_ansible
-      - install_nodejs
+      - install-nodejs
       # Add ssh keys with fingerprint
       - add_ssh_keys:
           fingerprints: ["24:6f:08:e5:90:5e:a9:ee:53:b3:a9:44:9a:8a:c0:cc"]
