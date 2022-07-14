@@ -284,6 +284,8 @@ jobs:
       - install_awscli
       - install_ansible
       - install-nodejs
+      - restore_cache:
+         keys:[fronntend-build]
       - run:
           name: Install dependencies
           command: |
@@ -317,6 +319,55 @@ jobs:
       - destroy-environment
       - revert-migrations
 
+  deploy-backend:
+    docker:
+      # Docker image here that supports Ansible
+      - image: cimg/base:stable
+    steps:
+      # Checkout code from git
+      - checkout
+      - install_awscli
+      - install_ansible
+      - install_nodejs
+      # Add ssh keys with fingerprint
+      - add_ssh_keys:
+          fingerprints: ["24:6f:08:e5:90:5e:a9:ee:53:b3:a9:44:9a:8a:c0:cc"]
+      # attach workspace
+      - attach_workspace:
+          at: ~/
+      - restore_cache:
+          keys: [backend-build]
+      - run:
+          name: Install dependencies
+          command: |
+            # your code here
+            cd backend
+            npm install
+      - run:
+          name: Package backend
+          command: |
+            # your code here
+            cd backend
+            npm run build
+            tar -cf artifact.tar
+            cd ..
+            cp backend/artifact.tar .circleci/ansible/roles/deploy/files
+      - run:
+          name: Deploy backend
+          command: |
+            # your code here
+            export TYPEOFORM_MIGRATIONS_DIR=./migrations
+            export TYPEOFORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js}
+            export TYPEOFORM_MIGRATIONS=./migrations/*.ts
+            cd.circleci/ansible
+            echo "Contents  of the inventory.txt file is -------"
+            cat inventory.txt
+            ansible-playbook -i inventory.txt deploy-backend.yml
+      # Here's where you will add some code to rollback on failure
+      - destroy-environment
+      - revert-migrations
+
+
 workflows:
   default:
     jobs:
@@ -337,4 +388,6 @@ workflows:
       - run-migrations:
           requires: [configure-infrastructure]
       - deploy-frontend:
+          requires: [run-migrations]
+      - deploy-backend:
           requires: [run-migrations]
