@@ -285,7 +285,7 @@ jobs:
       - install_ansible
       - install-nodejs
       - restore_cache:
-         keys:[frontend-build]
+         keys: [frontend-build]
       - run:
           name: Install dependencies
           command: |
