@@ -19,7 +19,7 @@
   become: yes
   command: pm2 stop default
 
-  - name: "start the app"
+- name: "start the app"
   become: yes
   command: pm2 start npm --start
     
