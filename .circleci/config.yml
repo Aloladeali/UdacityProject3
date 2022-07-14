@@ -328,17 +328,18 @@ jobs:
       - image: cimg/base:stable      
     steps:
       - checkout
+      - install_awscli
+      - install_ansible
+      - install-nodejs
       - add_ssh_keys:
-          fingerprints: [5e:8b:bc:bb:1b:08:ab:90:53:83:06:d4:18:a7:b2:b9]
+          fingerprints: ["24:6f:08:e5:90:5e:a9:ee:53:b3:a9:44:9a:8a:c0:cc"]
       - attach_workspace:
           at: .
       - run:
           name: Install dependencies
           command: |
-            apk add --update ansible
-            apk add --update npm
-            apk add --update curl
-            pip3 --no-cache-dir install awscli
+            cd backend
+            npm install
       - run:
           name: Build Backend
           command: |
