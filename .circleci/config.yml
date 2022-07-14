@@ -253,6 +253,7 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
+      - install_awscli
       # attach workspace
       - attach_workspace:
           at: ~/
@@ -292,6 +293,8 @@ jobs:
       - install-nodejs
       - restore_cache:
          keys: [frontend-build]
+      - attach_workspace:
+          at: ~/
       - run:
           name: Install dependencies
           command: |
@@ -336,8 +339,10 @@ jobs:
       - install-nodejs
       - add_ssh_keys:
           fingerprints: ["24:6f:08:e5:90:5e:a9:ee:53:b3:a9:44:9a:8a:c0:cc"]
+      - restore_cache:
+          keys: [backend-build]
       - attach_workspace:
-          at:  .
+          at: ~/
       - run:
           name: Install dependencies
           command: |
@@ -365,6 +370,8 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - install_awscli
+      - install_nodejs
       - run:
           name: Install dependencies
           command: |
