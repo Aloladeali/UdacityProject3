@@ -1,7 +1,8 @@
 ---
 - name: extract artifact
-  command: tar xzf .circleci/ansible/roles/deploy/files/artifact.tar.gz
-
+  unarchive:
+    src: files/artifact.tar.gz
+    dest: ~/
 - name: "install npm"
   become: yes
   apt:
@@ -21,6 +22,6 @@
 
 - name: "start the app"
   become: yes
-  command: pm2 start npm 
+  command: pm2 start npm --start
 
 
