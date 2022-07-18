@@ -6,9 +6,9 @@
 
 - name: "Copy files to server"
   ansible.builtin.copy:
-  src: "files/artifact.tar.gz"
-  dest: "$HOME/artifact.tar.gz"
-  follow: true
+    src: "files/artifact.tar.gz"
+    dest: "$HOME/artifact.tar.gz"
+    follow: true
 
 - name: "install dependencies."
   become: true
