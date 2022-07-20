@@ -259,7 +259,7 @@ jobs:
 
       - persist_to_workspace:
           root: ~/
-          path:
+          paths:
             - project/backend
       - destroy-environment
 
