@@ -20,7 +20,14 @@
     src: files/artifact.tar.gz
     dest: ~/
 
-- name: Define environment
+  
+
+- name: Start the App
+  become: true
+  shell: |
+    nm install
+    sudo pm2 stop default
+    sudo pm2 start npm -- start
   args:
     chdir: ~/
   environment:
@@ -35,11 +42,3 @@
     - TYPEORM_DATABASE: "{{ lookup('env', 'TYPEORM_DATABASE')}}"
     - TYPEORM_MIGRATIONS: "{{ lookup('env', 'TYPEORM_MIGRATIONS')}}"
     - TYPEORM_MIGRATIONS_DIR: "{{ lookup('env', 'TYPEORM_MIGRATIONS_DIR')}}"
-
-
-- name: Start the App
-  become: true
-  shell: |
-    nm install
-    sudo pm2 stop default
-    sudo pm2 start npm -- start
