@@ -1,2 +1,2 @@
 https://github.com/Aloladeali/UdacityProject3[URL01]
-http://107.22.152.32:3030[URL02] OR  s3://udapeople-71b699a/7d234c755f55c47d2c5a.js[URL02]
+http://107.22.152.32:3030[URL02] OR  s3://udapeople-71b699a/7d234c755f55c47d2c5a.js[URL0]
