@@ -421,6 +421,7 @@ jobs:
           name: Install dependencies
           command: |
             yum install -y npm nodejs
+      - run:         
           name: Update cloudfront distribution
           command: |
             export OldWorkflowID=$(aws cloudformation list-exports \
@@ -452,7 +453,8 @@ jobs:
             export STACKS=$(aws cloudformation list-stacks --query "StackSummaries[*].StackName" --stack-status-filter CREATE_COMPLETE --no-paginate --output text)
             echo Stack names: "${STACKS[@]}"
       - run:
-          name: Cleanup old files and Stacks     
+          name: Cleanup old files and Stacks
+          command: |     
             if [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID}" ]]
             then
               echo "-----------------Delete Confirmed----------------"
