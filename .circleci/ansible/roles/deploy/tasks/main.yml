@@ -1,62 +1,45 @@
 ---
-- name: Create app directory
-  file:
-    path: $HOME/web
-    state: directory
 
-- name: "Copy files to server"
-  ansible.builtin.copy:
-    src: "files/artifact.tar.gz"
-    dest: "$HOME/artifact.tar.gz"
-    follow: true
+- name: "Install Node.js 13"
+  shell: |
+   # Install Node.js LTS version as our base Node.js version
+   curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+   sudo apt-get install -y nodejs
 
-- name: "install nodejs and npm."
-  become: true
-  apt:
-    name: 
-      - nodejs
-      - npm
-    state: latest
-    update_cache: yes
+   # Use n version manager to use Node.js v13.8.0
+   sudo npm install -g n
+   sudo n 13.8.0
 
-- name: "install n"
-  become: true
-  npm:
-    name: n
-    global: true
-    production: true
-
-- name: "install nodejs 13.8.0"
-  become: true
-  shell: n 13.8.0
-
-- name: "install pm2"
-  become: true
-  npm:
+- name: "Install PM2 globally"
+  npm:  
     name: pm2
-    global: true
-    state: latest
+    global: yes
 
-
-- name: extract artifact
+- name: Extract the Artifact
   unarchive:
     src: files/artifact.tar.gz
     dest: ~/
 
-- name: Build
+#- name: Define environment
+  #args:
+    #chdir: ~/
+  #environment:
+    #- NODE_ENV: production
+    #- ENVIRONMENT: production
+    #- TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION')}}" 
+    #- TYPEORM_ENTITIES: "{{ lookup('env', 'TYPEORM_ENTITIES')}}"
+    #- TYPEORM_HOST: "{{ lookup('env', 'TYPEORM_HOST')}}"
+    #- TYPEORM_PORT: 5432
+    #- TYPEORM_USERNAME: "{{ lookup('env', 'TYPEORM_USERNAME')}}"
+    #- TYPEORM_PASSWORD: "{{ lookup('env', 'TYPEORM_PASSWORD')}}"
+    #- TYPEORM_DATABASE: "{{ lookup('env', 'TYPEORM_DATABASE')}}"
+    #- TYPEORM_MIGRATIONS: "{{ lookup('env', 'TYPEORM_MIGRATIONS')}}"
+    #- TYPEORM_MIGRATIONS_DIR: "{{ lookup('env', 'TYPEORM_MIGRATIONS_DIR')}}"
+
+
+- name: Start the App
   become: true
   shell: |
-    cd /home/ubuntu
-    npm install
-    npm run build
-
-- name: "stop default"
-  become: true
-  command: sudo pm2 stop default
-
-- name: "start the app"
-  become: true
-  command: sudo pm2 start npm -- run start
-
-
-
+    nm install
+    sudo pm2 stop default
+    sudo pm2 start npm -- start
