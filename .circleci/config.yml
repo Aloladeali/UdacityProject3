@@ -410,8 +410,8 @@ jobs:
               return 1
             fi
 
-      #- revert-migrations
-      #- destroy-environment
+      - revert-migrations
+      - destroy-environment
 
   cloudfront-update:
     docker:
@@ -432,13 +432,14 @@ jobs:
             echo Current Workflow Id: "${CIRCLE_WORKFLOW_ID:0:7}"
             aws cloudformation deploy \
               --template-file .circleci/files/cloudfront.yml \
-              --stack-name "InitialStack" \
+              --stack-name "Udapeople-Cloudfront-Stack" \
               --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
               --tags project=udapeople
             echo OldWorkflowID: "${OldWorkflowID}"
             echo Current Workflow Id: "${CIRCLE_WORKFLOW_ID:0:7}"
       
       - revert-migrations
+
 
   cleanup:
     docker:
@@ -464,6 +465,9 @@ jobs:
             else
               echo "----------------No need to clean up-----------------"
             fi
+          
+      - revert-migrations
+      - destroy-environment
 workflows:
   default:
     jobs:
@@ -490,6 +494,6 @@ workflows:
       - smoke-test:
           requires: [deploy-frontend, deploy-backend]
       - cloudfront-update:
-          requires: [smoke-test]
+          requires: [deploy-frontend, deploy-backend]
       - cleanup:
-          requires: [cloudfront-update]
+          requires: [deploy-frontend, deploy-backend]
