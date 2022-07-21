@@ -182,7 +182,7 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
-      # Checkout code fro git
+      # Checkout code from gi
       - checkout
       - install_awscli
       - run:
