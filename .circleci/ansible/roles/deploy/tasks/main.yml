@@ -1,5 +1,9 @@
 ---
-
+- name: "Create the backend app directory"
+  file:
+    path: ~/
+    state: directory
+    
 - name: "Install Node.js 13"
   shell: |
    # Install Node.js LTS version as our base Node.js version
