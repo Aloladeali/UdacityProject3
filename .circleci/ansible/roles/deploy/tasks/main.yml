@@ -24,7 +24,7 @@
 - name: Extract the Artifact
   unarchive:
     src: files/artifact.tar.gz
-    dest: ~/home/ubuntu
+    dest: ~/
 
   
 
@@ -34,17 +34,17 @@
     nm install
     sudo pm2 stop default
     sudo pm2 start npm -- start
-  #args:
-   # chdir: ~/
-  #environment:
-  #  - NODE_ENV: production
-   # - ENVIRONMENT: production
-#    - TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION')}}" 
-   # - TYPEORM_ENTITIES: "{{ lookup('env', 'TYPEORM_ENTITIES')}}"
-    #- TYPEORM_HOST: "{{ lookup('env', 'TYPEORM_HOST')}}"
-    #- TYPEORM_PORT: 5432
-    #- TYPEORM_USERNAME: "{{ lookup('env', 'TYPEORM_USERNAME')}}"
-    #- TYPEORM_PASSWORD: "{{ lookup('env', 'TYPEORM_PASSWORD')}}"
-    #- TYPEORM_DATABASE: "{{ lookup('env', 'TYPEORM_DATABASE')}}"
-    #- TYPEORM_MIGRATIONS: "{{ lookup('env', 'TYPEORM_MIGRATIONS')}}"
-    #- TYPEORM_MIGRATIONS_DIR: "{{ lookup('env', 'TYPEORM_MIGRATIONS_DIR')}}"
+  args:
+    chdir: ~/
+  environment:
+    - NODE_ENV: production
+    - ENVIRONMENT: production
+    - TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION')}}" 
+    - TYPEORM_ENTITIES: "{{ lookup('env', 'TYPEORM_ENTITIES')}}"
+    - TYPEORM_HOST: "{{ lookup('env', 'TYPEORM_HOST')}}"
+    - TYPEORM_PORT: 5432
+    - TYPEORM_USERNAME: "{{ lookup('env', 'TYPEORM_USERNAME')}}"
+    - TYPEORM_PASSWORD: "{{ lookup('env', 'TYPEORM_PASSWORD')}}"
+    - TYPEORM_DATABASE: "{{ lookup('env', 'TYPEORM_DATABASE')}}"
+    - TYPEORM_MIGRATIONS: "{{ lookup('env', 'TYPEORM_MIGRATIONS')}}"
+    - TYPEORM_MIGRATIONS_DIR: "{{ lookup('env', 'TYPEORM_MIGRATIONS_DIR')}}"
