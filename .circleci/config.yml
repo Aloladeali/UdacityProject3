@@ -214,7 +214,7 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
-      # Here's where you will add some code to rollback on failur
+      # Here's where you will add some code to rollback on failure
       - destroy-environment
 
   configure-infrastructure:
@@ -493,7 +493,7 @@ workflows:
           requires: [run-migrations]
       - smoke-test:
           requires: [deploy-frontend, deploy-backend]
-      - cloudfront-update:
-          requires: [deploy-frontend, deploy-backend]
-      - cleanup:
-          requires: [deploy-frontend, deploy-backend]
+      #- cloudfront-update:
+          #requires: [deploy-frontend, deploy-backend]
+      #- cleanup:
+          #requires: [deploy-frontend, deploy-backend]
