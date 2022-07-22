@@ -358,6 +358,7 @@ jobs:
             npm run build
             cd ..
             tar -C backend -czvf artifact.tar.gz .
+            ls -lh
             mkdir -p ~/project/.circleci/ansible/roles/deploy/files/
             mv artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
             cd .circleci/ansible
@@ -369,7 +370,7 @@ jobs:
 
   smoke-test:
     docker:
-      - image: python:3.10-alpine3.16
+      - image: python:3.11-alpine3.16
     steps:
       - checkout
       - attach_workspace:

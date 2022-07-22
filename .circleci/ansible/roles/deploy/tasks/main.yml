@@ -1,4 +1,6 @@
 ---
+#- name:"Remote env"
+  #shell: env
 
 - name: "Install Node.js 13"
   shell: |
@@ -15,16 +17,22 @@
     name: pm2
     global: yes
 
-- name: "Create the backend app directory"
-  file:
-    path: ~/web
-    state: directory
+#- name: "Create the backend app directory"
+  #file:
+    #path: ~/web
+    #state: directory
 
 
-- name: Extract the Artifact
+- name: Copy artifact into instance
+  become: true
   unarchive:
     src: files/artifact.tar.gz
     dest: ~/
+
+- name: Extract the Artifact
+  become: true
+  shell: |
+    tar -xvzf ~/artifact.tar.gz
 
 - name: Start the App
   become: true
