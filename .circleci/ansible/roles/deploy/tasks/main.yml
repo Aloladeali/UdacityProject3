@@ -31,6 +31,7 @@
 - name: Start the App
   become: true
   shell: |
+    cd ~/
     npm install
     sudo pm2 stop default
     sudo pm2 start npm -- start
