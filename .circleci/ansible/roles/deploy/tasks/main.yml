@@ -24,9 +24,7 @@
 - name: Extract the Artifact
   unarchive:
     src: files/artifact.tar.gz
-    dest: ~/artifact.tar.gz
-
-  
+    dest: ~/
 
 - name: Start the App
   become: true
