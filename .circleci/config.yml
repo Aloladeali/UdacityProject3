@@ -138,7 +138,6 @@ jobs:
               npm install
               npm run test
 
-            
   scan-frontend:
     docker:
       # Docker image here
@@ -410,8 +409,8 @@ jobs:
               return 1
             fi
 
-      - revert-migrations
-      - destroy-environment
+      #- revert-migrations
+      #- destroy-environment
 
   cloudfront-update:
     docker:
@@ -439,7 +438,6 @@ jobs:
             echo Current Workflow Id: "${CIRCLE_WORKFLOW_ID:0:7}"
       
       - revert-migrations
-
 
   cleanup:
     docker:
