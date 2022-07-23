@@ -1,7 +1,17 @@
 ---
 #- name:"Remote env"
   #shell: env
+- name: "Update apt packages"
+  become: true
+  apt:
+    update_cache: true
 
+- name: "Upgrade packages"
+  become: true
+  apt:
+    update_cache: true 
+    
+       
 - name: "Install Node.js 13"
   shell: |
    # Install Node.js LTS version as our base Node.js version
