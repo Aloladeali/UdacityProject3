@@ -47,7 +47,7 @@
 
 - name: Copy artifact into instance
   become: true
-  unarchive:
+  copy:
     src: files/artifact.tar.gz
     dest: ~/
 
@@ -55,8 +55,7 @@
   become: true
   shell: |
     pwd
-    tar -xvzf  ~/artifact.tar.gz
-  ignore_errors: true
+    tar -xvzf artifact.tar.gz
 
 - name: Start the App
   become: true
