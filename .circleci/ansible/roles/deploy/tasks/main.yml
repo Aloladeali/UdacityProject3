@@ -10,8 +10,13 @@
   become: true
   apt:
     update_cache: true 
-    
-       
+
+- name: "Remove unrequired dependencies"
+  become: true
+  apt:
+    autoremove: true 
+
+
 - name: "Install Node.js 13"
   shell: |
    # Install Node.js LTS version as our base Node.js version
@@ -26,6 +31,13 @@
   npm:  
     name: pm2
     global: yes
+
+- name: "install n"
+  become: true
+  npm:
+    name: n
+    global: true
+    production: true
 
 #- name: "Create the backend app directory"
   #file:
@@ -42,7 +54,7 @@
 - name: Extract the Artifact
   become: true
   shell: |
-    tar -xvf  ~/artifact.tar.gz
+    tar -xvzf  ~/artifact.tar.gz
 
 
 - name: Start the App
