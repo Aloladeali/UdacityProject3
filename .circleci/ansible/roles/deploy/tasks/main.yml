@@ -54,8 +54,9 @@
 - name: Extract the Artifact
   become: true
   shell: |
-    sudo tar -xvf  ~/artifact.tar.gz 
-
+    pwd
+    tar -xvzf  ~/artifact.tar.gz
+  ignore_errors: true
 
 - name: Start the App
   become: true
